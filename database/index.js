@@ -44,3 +44,5 @@ let save = (/* TODO */) => {
 }
 
 module.exports.save = save;
+module.exports.Repo = Repo;
+module.exports.User = User;
