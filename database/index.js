@@ -49,12 +49,13 @@ let save = (repoArr, callback) => {
   let saveCount = 0;
   repoArr.forEach(repo => {
     // only do a save, if it's not already there
-    Repo.find({id: 12321321321321312}, (error, docs) => {
+    Repo.find({id: repo.id}, (error, docs) => {
       if (error) {
         console.log('*** FOUND ERROR: ', error)
       } else {
         // no duplicates found, let's save
         if (docs.length === 0) {
+          console.log('*** NO DUPLICATES FOUND - saving repo_id: ', repo.id);
           // save it!
           // TODO: Move this functionality into a Repo method
           let repoModel = new Repo(repo);
@@ -78,24 +79,6 @@ let save = (repoArr, callback) => {
         }
       }
     });
-    // // save it!
-    // let repoModel = new Repo(repo);
-    // console.log('repoObj:', repoModel);
-    // repoModel.save((error, resultObj, numAffected) => {
-    //   if (error) {
-    //     console.log('[database:error]', error);
-    //     // callback(error, 0);
-    //   } else {
-    //     console.log(`[database:resultObj : numAffected] ${resultObj} : ${numAffected}`);
-    //     // TODO: return the number of rows changed
-    //     // callback(null, numAffected);
-    //     saveCount++;
-    //   }
-    //   saveAttemptCount--;
-    //   if (saveAttemptCount === 0) {
-    //     callback(saveCount);
-    //   }
-    // });
   });
 }
 
