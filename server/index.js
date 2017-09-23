@@ -22,31 +22,15 @@ app.post('/repos', function (req, res) {
         // TODO: Relay some sort of failure back to the client
         res.end();
       } else {
-        // console.log('*** GET REPO SUCCESS:', result);
         let githubFetchResult = JSON.parse(result.body);
-        // console.log('*** GET REPO SUCCESS:', githubFetchResult);
-        console.log('*** GET REPO SUCCESS:', githubFetchResult.length);
-        //   id: Number,
-        //   name: String,
-        //   full_name: String,
-        //   owner_id: Number
-        // });
-        //
-        // let userSchema = mongoose.Schema({
-        //   id: Number,
-        //   name: String,
-        //   avatar_url: String,
-        //   html_url: String
-        //
-        // let repoArr = [];
-        // githubFetchResult.forEach(result => {
-        //   repoArr
-        // });
+        console.log('*** GET REPO SUCCESS:', githubFetchResult);
         let repoModelArr = githubFetchResult.map(result => {
           return {
             id: result.id,
             name: result.name,
             full_name: result.full_name,
+            stargazers_count: result.stargazers_count,
+            watchers_count: result.watchers_count,
             owner_id: result.owner.id,
             owner_name: result.owner.login
           };
@@ -56,7 +40,6 @@ app.post('/repos', function (req, res) {
           console.log('[server] SAVED RECORDS =', numSaved);
           res.end();
         });
-        // res.end();
       }
     });
   });
@@ -66,6 +49,9 @@ app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
   console.log('/repos GET');
+  database.get({}, results => {
+    console.log('/repos GET RESULTS: ', results.length);
+  });
   res.end();
 });
 

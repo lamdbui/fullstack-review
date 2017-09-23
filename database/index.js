@@ -9,23 +9,11 @@ const db = mongoose.connect('mongodb://localhost/fetcher');
 
 let repoSchema = mongoose.Schema({
   // TODO: your schema here!
-  // [user]
-  // - id (unique, primary key)
-  // - name
-  // - avatar_url
-  // - html_url
-  //
-  // [repo]
-  // - id (unique, primary key)
-  // - name
-  // - full_name
-  // - owner_id (foreign key)
-  // TODO: remove this later and reference the User table
-  // - owner_name
-
   id: Number,
   name: String,
   full_name: String,
+  stargazers_count: Number,
+  watchers_count: Number,
   owner_id: Number,
   owner_name: String
 });
@@ -40,8 +28,38 @@ let userSchema = mongoose.Schema({
 let Repo = mongoose.model('Repo', repoSchema);
 let User = mongoose.model('User', userSchema);
 
-let save = (repoArr, callback) => {
+let get = (options, callback) => {
+  // get items back from the database
+  // Repo.find().sort('watchers_count', 'ascending').limit(25)
+  //Article.find({}).sort({date: 'descending'}).exec(function(err, docs) { ... });
+  // Repo.find({}).sort({watchers_count: 'descending'}).limit(25);
+  // Repo.find({}).sort({watchers_count: 'descending'}).exec((error, docs) => {
+  //   console.log('*** DOCS: ', sortedDocs.length);
+  //   console.log('*** DOCS: ', sortedDocs);
+  // });
+  // Repo.find((error, docs) => {
+  //   docs.sort('watchers_count', 'descending')
+  //     .exec((error, docs) => {
+  //       console.log('*** DOCS: ', sortedDocs.length);
+  //       console.log('*** DOCS: ', sortedDocs);
+  //     });
+  // });
+  Repo.find({}, (error, docs) => {
+    if (error) {
+      console.log('*** REPO GET error');
+      callback([]);
+    } else {
+      console.log('*** REPO GET success -', docs.length);
+      callback(docs);
+    }
+  });
+};
 
+let save = (repoArr, callback) => {
+  // Repo.remove({owner_name: 'lamdbui'});
+  Repo.remove({}, (error, removed) => {
+    console.log('R: ', removed);
+  });
   // TODO: Your code here
   // This function should save a repo or repos to
   // the MongoDB
@@ -65,7 +83,7 @@ let save = (repoArr, callback) => {
               console.log('[database:error]', error);
               // callback(error, 0);
             } else {
-              console.log(`[database:resultObj : numAffected] ${resultObj} : ${numAffected}`);
+              // console.log(`[database:resultObj : numAffected] ${resultObj} : ${numAffected}`);
               saveCount++;
             }
             saveAttemptCount--;
@@ -75,13 +93,14 @@ let save = (repoArr, callback) => {
             }
           });
         } else {
-          console.log('*** FOUND A DUPLICATE - do not insert: ', docs);
+          // console.log('*** FOUND A DUPLICATE - do not insert: ', docs);
         }
       }
     });
   });
 }
 
+module.exports.get = get;
 module.exports.save = save;
 module.exports.Repo = Repo;
 module.exports.User = User;
