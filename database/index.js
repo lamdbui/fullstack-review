@@ -48,24 +48,54 @@ let save = (repoArr, callback) => {
   let saveAttemptCount = repoArr.length;
   let saveCount = 0;
   repoArr.forEach(repo => {
-    // save it!
-    let repoModel = new Repo(repo);
-    console.log('repoObj:', repoModel);
-    repoModel.save((error, resultObj, numAffected) => {
+    // only do a save, if it's not already there
+    Repo.find({id: 12321321321321312}, (error, docs) => {
       if (error) {
-        console.log('[database:error]', error);
-        // callback(error, 0);
+        console.log('*** FOUND ERROR: ', error)
       } else {
-        console.log(`[database:resultObj : numAffected] ${resultObj} : ${numAffected}`);
-        // TODO: return the number of rows changed
-        // callback(null, numAffected);
-        saveCount++;
-      }
-      saveAttemptCount--;
-      if (saveAttemptCount === 0) {
-        callback(saveCount);
+        // no duplicates found, let's save
+        if (docs.length === 0) {
+          // save it!
+          // TODO: Move this functionality into a Repo method
+          let repoModel = new Repo(repo);
+          console.log('repoObj:', repoModel);
+          repoModel.save((error, resultObj, numAffected) => {
+            if (error) {
+              console.log('[database:error]', error);
+              // callback(error, 0);
+            } else {
+              console.log(`[database:resultObj : numAffected] ${resultObj} : ${numAffected}`);
+              saveCount++;
+            }
+            saveAttemptCount--;
+            // return back our result after all save attempts were completed
+            if (saveAttemptCount === 0) {
+              callback(saveCount);
+            }
+          });
+        } else {
+          console.log('*** FOUND A DUPLICATE - do not insert: ', docs);
+        }
       }
     });
+    // // save it!
+    // let repoModel = new Repo(repo);
+    // console.log('repoObj:', repoModel);
+    // repoModel.save((error, resultObj, numAffected) => {
+    //   if (error) {
+    //     console.log('[database:error]', error);
+    //     // callback(error, 0);
+    //   } else {
+    //     console.log(`[database:resultObj : numAffected] ${resultObj} : ${numAffected}`);
+    //     // TODO: return the number of rows changed
+    //     // callback(null, numAffected);
+    //     saveCount++;
+    //   }
+    //   saveAttemptCount--;
+    //   if (saveAttemptCount === 0) {
+    //     callback(saveCount);
+    //   }
+    // });
   });
 }
 
