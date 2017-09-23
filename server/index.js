@@ -59,8 +59,9 @@ app.get('/repos', function (req, res) {
   // res.end();
 });
 
-let port = 1128;
+// let port = 1128;
+app.set('port', process.env.PORT || 1128);
 
-app.listen(port, function() {
-  console.log(`listening on port ${port}`);
+app.listen(app.get('port'), function() {
+  console.log(`listening on port ${app.get('port')}`);
 });
