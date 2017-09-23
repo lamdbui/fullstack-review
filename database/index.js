@@ -44,15 +44,39 @@ let get = (options, callback) => {
   //       console.log('*** DOCS: ', sortedDocs);
   //     });
   // });
-  Repo.find({}, (error, docs) => {
-    if (error) {
-      console.log('*** REPO GET error');
+
+  // generate a search query then execute it, then handle the returning promise
+  Repo.find().sort({watchers_count: -1}).exec()
+    .then(resolve => {
+      console.log('### sorted: ', resolve.length);
+      callback(resolve);
+    })
+    .catch(reject => {
+      console.log('### sorted REJECT: ', reject.length);
+      // return empty array on error
       callback([]);
-    } else {
-      console.log('*** REPO GET success -', docs.length);
-      callback(docs);
-    }
-  });
+    });
+  // console.log('### sorted - ', Repo.find().sort({watchers_count: -1}).exec());
+
+  // Repo.find({}, (error, docs) => {
+  //   if (error) {
+  //     console.log('*** REPO GET error');
+  //     callback([]);
+  //   } else {
+  //     console.log('*** REPO GET success -', docs.length);
+  //     // do the sorting here
+  //     docs.sort({watchers_count: -1}, (error, sortedDocs) => {
+  //       if (error) {
+  //         console.log('*** ERROR SORTING');
+  //         callback([]);
+  //       } else {
+  //         console.log('*** SORTING SUCCESSFUL -', sortedDocs.length);
+  //         callback(sortedDocs);
+  //       }
+  //     });
+  //     // callback(docs);
+  //   }
+  // });
 };
 
 let save = (repoArr, callback) => {
