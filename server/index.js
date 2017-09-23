@@ -31,6 +31,7 @@ app.post('/repos', function (req, res) {
             full_name: result.full_name,
             stargazers_count: result.stargazers_count,
             watchers_count: result.watchers_count,
+            html_url: result.html_url,
             owner_id: result.owner.id,
             owner_name: result.owner.login
           };

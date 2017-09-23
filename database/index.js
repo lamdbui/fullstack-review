@@ -8,6 +8,7 @@ let repoSchema = mongoose.Schema({
   full_name: String,
   stargazers_count: Number,
   watchers_count: Number,
+  html_url: String,
   owner_id: Number,
   owner_name: String
 });
