@@ -57,9 +57,9 @@ let get = (options, callback) => {
 
 let save = (repoArr, callback) => {
   // Repo.remove({owner_name: 'lamdbui'});
-  Repo.remove({}, (error, removed) => {
-    console.log('R: ', removed);
-  });
+  // Repo.remove({}, (error, removed) => {
+  //   console.log('R: ', removed);
+  // });
   // TODO: Your code here
   // This function should save a repo or repos to
   // the MongoDB
@@ -93,7 +93,7 @@ let save = (repoArr, callback) => {
             }
           });
         } else {
-          // console.log('*** FOUND A DUPLICATE - do not insert: ', docs);
+          console.log('*** FOUND A DUPLICATE - do not insert: ', docs.length);
         }
       }
     });

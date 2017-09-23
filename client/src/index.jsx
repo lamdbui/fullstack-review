@@ -8,20 +8,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      repos: []
+      repos: [1, 2, 3]
     }
-
   }
 
   search (term) {
     console.log(`${term} was searched`);
-    // $.ajax({
-    //   type: "POST",
-    //   url: url,
-    //   data: data,
-    //   success: success,
-    //   dataType: dataType
-    // });
     // TODO: Should we do some input validation here?
     $.ajax({
       type: "POST",
@@ -30,6 +22,20 @@ class App extends React.Component {
       dataType: 'text',
       success: (data, status) => {
         console.log(`*** GITHUB USER ${term} SUCCESSFUL`);
+        // console.log(`*** GITHUB USER DATA ${data.items} SUCCESSFUL`, data);
+        console.log('GH DATA: ', data);
+
+        $.ajax({
+          type: "GET",
+          url: '/repos',
+          success: (data) => {
+            console.log('*** SEARCH GET SUCCESS -', data);
+            this.setState({ repos: data })
+          },
+          error: (data) => {
+            console.log('*** THE SADNESS -', data);
+          }
+        });
       }
     });
 

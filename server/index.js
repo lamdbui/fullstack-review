@@ -51,8 +51,11 @@ app.get('/repos', function (req, res) {
   console.log('/repos GET');
   database.get({}, results => {
     console.log('/repos GET RESULTS: ', results.length);
+    res.statusCode = 200;
+    // TODO: Maybe format the data instead of sending rows
+    res.send(results);
   });
-  res.end();
+  // res.end();
 });
 
 let port = 1128;
