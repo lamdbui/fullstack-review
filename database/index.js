@@ -1,12 +1,6 @@
 const mongoose = require('mongoose');
 const db = mongoose.connect('mongodb://localhost/fetcher');
 
-// TODO: Do we need this?
-// db.on('error', console.error.bind(console, 'connection error:'));
-// db.once('open', function() {
-//   console.log('*** MONGOOSE CONNECTED ***');
-// });
-
 let repoSchema = mongoose.Schema({
   // TODO: your schema here!
   id: Number,
@@ -30,21 +24,6 @@ let User = mongoose.model('User', userSchema);
 
 let get = (options, callback) => {
   // get items back from the database
-  // Repo.find().sort('watchers_count', 'ascending').limit(25)
-  //Article.find({}).sort({date: 'descending'}).exec(function(err, docs) { ... });
-  // Repo.find({}).sort({watchers_count: 'descending'}).limit(25);
-  // Repo.find({}).sort({watchers_count: 'descending'}).exec((error, docs) => {
-  //   console.log('*** DOCS: ', sortedDocs.length);
-  //   console.log('*** DOCS: ', sortedDocs);
-  // });
-  // Repo.find((error, docs) => {
-  //   docs.sort('watchers_count', 'descending')
-  //     .exec((error, docs) => {
-  //       console.log('*** DOCS: ', sortedDocs.length);
-  //       console.log('*** DOCS: ', sortedDocs);
-  //     });
-  // });
-
   // generate a search query then execute it, then handle the returning promise
   Repo.find().sort({watchers_count: -1}).exec()
     .then(resolve => {
@@ -56,34 +35,9 @@ let get = (options, callback) => {
       // return empty array on error
       callback([]);
     });
-  // console.log('### sorted - ', Repo.find().sort({watchers_count: -1}).exec());
-
-  // Repo.find({}, (error, docs) => {
-  //   if (error) {
-  //     console.log('*** REPO GET error');
-  //     callback([]);
-  //   } else {
-  //     console.log('*** REPO GET success -', docs.length);
-  //     // do the sorting here
-  //     docs.sort({watchers_count: -1}, (error, sortedDocs) => {
-  //       if (error) {
-  //         console.log('*** ERROR SORTING');
-  //         callback([]);
-  //       } else {
-  //         console.log('*** SORTING SUCCESSFUL -', sortedDocs.length);
-  //         callback(sortedDocs);
-  //       }
-  //     });
-  //     // callback(docs);
-  //   }
-  // });
 };
 
 let save = (repoArr, callback) => {
-  // Repo.remove({owner_name: 'lamdbui'});
-  // Repo.remove({}, (error, removed) => {
-  //   console.log('R: ', removed);
-  // });
   // TODO: Your code here
   // This function should save a repo or repos to
   // the MongoDB
